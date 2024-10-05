@@ -1,0 +1,37 @@
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    padding:20px;
+    
+    
+}
+form {
+   
+    margin:30px auto;
+    padding:5px;
+    text-align: center;
+    width: 80%;
+    
+}
+#signup{
+    margin-top: 15px;
+}
+
+label {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+input{
+    display:block;
+    width:100%;
+    margin: 0 auto;
+    padding:5px;
+    border-radius: 5px;
+    box-sizing: border-box; 
+}
