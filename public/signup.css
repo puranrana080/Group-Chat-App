@@ -1,21 +1,22 @@
-
 .container {
     max-width: 400px;
     margin: 0 auto;
     text-align: center;
-    padding:20px;
-    
-    
+    padding: 20px;
+
+
 }
+
 form {
-   
-    margin:30px auto;
-    padding:5px;
+
+    margin: 30px auto;
+    padding: 5px;
     text-align: center;
     width: 80%;
-    
+
 }
-#signup{
+
+#signup {
     margin-top: 15px;
 }
 
@@ -27,11 +28,12 @@ label {
     font-size: 22px;
     font-weight: bold;
 }
-input{
-    display:block;
-    width:100%;
+
+input {
+    display: block;
+    width: 100%;
     margin: 0 auto;
-    padding:5px;
+    padding: 5px;
     border-radius: 5px;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
