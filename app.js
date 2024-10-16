@@ -5,7 +5,7 @@ const cors =require('cors')
 const User = require('./model/user')
 
 const sequelize = require('./util/database')
-const userRoutes = require('./routes/register')
+const userRoutes = require('./routes/user')
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, "public")))
