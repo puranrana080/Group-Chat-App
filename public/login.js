@@ -10,6 +10,7 @@ function loginUser(event){
         alert("User logged in Successfully")
         localStorage.setItem('token',response.data.token)
         console.log("user logged in successful",response.data.message)
+        window.location.href='/groupchat'
 
     })
     .catch(err=>{

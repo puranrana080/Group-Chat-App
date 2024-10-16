@@ -40,3 +40,8 @@ input {
 #login{
     margin-top: 10px;
 }
+
+.input-chat{
+    display: inline;
+    
+}

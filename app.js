@@ -6,6 +6,7 @@ const User = require('./model/user')
 
 const sequelize = require('./util/database')
 const userRoutes = require('./routes/user')
+const groupchatRoutes=require('./routes/groupchat')
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, "public")))
@@ -15,6 +16,7 @@ app.use(cors({
 }))
 
 app.use(userRoutes)
+app.use(groupchatRoutes)
 
 
 
