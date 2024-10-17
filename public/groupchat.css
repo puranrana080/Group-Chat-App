@@ -1,19 +1,28 @@
-.container{ 
-    width:70%;
-    padding:5px;
+.container {
+    width: 70%;
+    padding: 5px;
 }
 
-.main-heading{
-    margin:0px auto;
+.main-heading {
+    margin: 0px auto;
     text-align: center;
 }
-p{
-    background-color: rgb(230, 248, 150);
-    padding:2px
-}
-.input-chat{
+
+.input-chat {
     background-color: rgb(145, 243, 145);
-   margin:30px auto ;
+    margin: 30px auto;
     text-align: center;
-    
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+
+}
+
+#chats p {
+    padding: 5px 10px;
+    margin: 0px;
+}
+
+#chats p:nth-child(odd) {
+    background-color: rgb(230, 248, 150);
 }

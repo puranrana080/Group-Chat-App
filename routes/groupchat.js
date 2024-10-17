@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const path=require('path')
 
-router.get('/groupchat',(req,res,next)=>{
-    res.sendFile(path.join(__dirname,'../public/groupchat.html'))
+const groupChatController = require('../controller/groupchat')
+const userauthentication = require('../middleware/auth')
 
+router.get('/groupchat', groupChatController.getGroupChat)
 
-})
+router.get('/groupchat/users', userauthentication.authenticate, groupChatController.getLoggedUsers)
 
+router.post('/groupchat/sendChat', userauthentication.authenticate, groupChatController.postSendChat)
 
-
-module.exports =router
+module.exports = router
