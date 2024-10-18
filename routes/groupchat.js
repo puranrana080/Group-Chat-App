@@ -10,4 +10,6 @@ router.get('/groupchat/users', userauthentication.authenticate, groupChatControl
 
 router.post('/groupchat/sendChat', userauthentication.authenticate, groupChatController.postSendChat)
 
+router.get('/groupchat/groupmessages',userauthentication.authenticate,groupChatController.getAllGroupChat)
+
 module.exports = router

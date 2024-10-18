@@ -8,7 +8,6 @@ const Message = require('../model/groupmessages')
 exports.getGroupChat = (req, res, next) => {
     res.sendFile(path.join(__dirname, '../public/groupchat.html'))
 
-
 }
 
 exports.getLoggedUsers = async (req, res, next) => {
@@ -30,7 +29,6 @@ exports.postSendChat = async (req, res, next) => {
         await Message.create({
             userMessage: req.body.message,
             userId: req.user.id
-
         })
 
         res.status(200).json({ message: "all ok " })
@@ -40,5 +38,29 @@ exports.postSendChat = async (req, res, next) => {
     catch (error) {
         res.status(500).json({ error: "error in sending msg" })
 
+    }
+}
+
+exports.getAllGroupChat = async (req, res, next) => {
+    try {
+        const allMsg = await Message.findAll()
+
+        const messagesWithUsers = []
+
+        for (let message of allMsg) {
+            const user = await message.getUser()
+            
+            messagesWithUsers.push({
+                userMessage: message.userMessage,
+                userName: user.userName
+            })
+        }
+        console.log("Finally", messagesWithUsers)
+
+        res.status(200).json({ allChat: messagesWithUsers })
+    }
+    catch (error) {
+        console.log("Error retriving message", error)
+        res.status(500).json({ error: error })
     }
 }

@@ -6,16 +6,17 @@ function sendChatToGroup(event) {
 
     axios.post("http://localhost:3000/groupchat/sendChat", { message: userMessage }, { headers: { "Authorization": token } })
         .then(response => {
-            console.log(response)
+            console.log("single",response.data)
+            
+            
+            displayChatOnScreen(response.data.chat)
+
         })
         .catch(error => {
             console.log("server err", error)
         })
 
 }
-
-
-
 
 
 function displayLoggedUserOnScreen(user) {
@@ -25,6 +26,38 @@ function displayLoggedUserOnScreen(user) {
     newpara.appendChild(document.createTextNode(`${user.userName} joined`))
     userPara.appendChild(newpara)
 }
+
+function displayChatOnScreen(chat) {
+    const userPara = document.getElementById('chats')
+
+    const newpara = document.createElement('p')
+
+    const userName = chat.userName;
+    const userMessage = chat.userMessage;
+
+    newpara.appendChild(document.createTextNode(`${userName} :   ${userMessage}`))
+    userPara.appendChild(newpara)
+}
+
+
+function getChatAndDisplay() {
+    const token = localStorage.getItem('token')
+    axios.get("http://localhost:3000/groupchat/groupmessages", { headers: { "Authorization": token } })
+        .then(response => {
+            console.log("all chat", response.data.allChat)
+            const groupChat = response.data.allChat
+            
+            groupChat.forEach(chat => {
+                displayChatOnScreen(chat)
+            })
+        })
+        .catch(err => {
+            console.log("Nothing from server", err)
+        })
+
+
+}
+
 
 
 
@@ -51,6 +84,9 @@ window.addEventListener("DOMContentLoaded", async () => {
         .catch(err => {
             console.log("err, not got", err)
         })
+
+
+     getChatAndDisplay()
 
 })
 
