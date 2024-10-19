@@ -1,7 +1,7 @@
 .container {
     width: 70%;
     padding: 5px;
-    margin-bottom:80px;
+    margin-bottom: 80px;
 }
 
 .main-heading {
@@ -13,18 +13,21 @@
     background-color: rgb(145, 243, 145);
     margin: 30px auto;
     text-align: center;
-    
+
     bottom: 0;
     width: 100%;
 
 }
 
-#chats {
-    padding-bottom: 80px; /* Ensure content does not overlap with the input chat */
+#para {
+    padding-bottom: 80px;
     overflow-y: auto;
 }
 
-#chats p {
+
+
+#chats p,
+#userLogged p {
     padding: 5px 10px;
     margin: 0px;
 }

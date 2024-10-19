@@ -23,8 +23,7 @@ exports.getLoggedUsers = async (req, res, next) => {
 exports.postSendChat = async (req, res, next) => {
 
     try {
-        console.log("Hey 1", req.body)
-        console.log("Hey 2", req.user)
+
 
         await Message.create({
             userMessage: req.body.message,
@@ -49,13 +48,12 @@ exports.getAllGroupChat = async (req, res, next) => {
 
         for (let message of allMsg) {
             const user = await message.getUser()
-            
+
             messagesWithUsers.push({
                 userMessage: message.userMessage,
                 userName: user.userName
             })
         }
-        console.log("Finally", messagesWithUsers)
 
         res.status(200).json({ allChat: messagesWithUsers })
     }
