@@ -7,6 +7,8 @@ function sendChatToGroup(event) {
     axios.post("http://localhost:3000/groupchat/sendChat", { message: userMessage }, { headers: { "Authorization": token } })
         .then(response => {
             console.log("single", response.data)
+            event.target.reset()
+
         })
         .catch(error => {
             console.log("server err", error)
@@ -38,15 +40,29 @@ function displayChatOnScreen(chat) {
 
 function getChatAndDisplay() {
     const token = localStorage.getItem('token')
-    axios.get("http://localhost:3000/groupchat/groupmessages", { headers: { "Authorization": token } })
+    const localStorageGroupChat = JSON.parse(localStorage.getItem('groupMsg'))
+    let lastMsgId;
+    if (localStorageGroupChat) {
+        lastMsgId = localStorageGroupChat[localStorageGroupChat.length - 1].msgId
+    }
+
+
+    axios.get(`http://localhost:3000/groupchat/groupmessages?msgId=${lastMsgId}`, { headers: { "Authorization": token } })
         .then(response => {
 
             const groupChat = response.data.allChat
+            console.log("New Message",groupChat)
+            const mergedMessages = (localStorageGroupChat || []).concat(groupChat)
+            while (mergedMessages.length > 10) {
+                mergedMessages.shift()
+            }
+
+            localStorage.setItem('groupMsg', JSON.stringify(mergedMessages))
 
             const chat = document.getElementById('chats')
             chat.innerHTML = ''
 
-            groupChat.forEach(chat => {
+            mergedMessages.forEach(chat => {
                 displayChatOnScreen(chat)
             })
         })
@@ -85,7 +101,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         })
 
     setInterval(() => getChatAndDisplay(), 1000)
-
+    // getChatAndDisplay()
 
 
 

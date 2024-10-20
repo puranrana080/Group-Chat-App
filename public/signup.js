@@ -11,6 +11,7 @@ function registerUser(event){
     .then(response=>{
         console.log("User Added Successfully",response.data)
         alert("Successfuly signed up")
+        event.target.reset()
 
     })
     .catch(err=>{

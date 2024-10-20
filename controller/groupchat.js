@@ -1,7 +1,7 @@
 const User = require('../model/user')
 const path = require('path')
 const Message = require('../model/groupmessages')
-
+const { Op } = require('sequelize')
 
 
 
@@ -42,8 +42,22 @@ exports.postSendChat = async (req, res, next) => {
 
 exports.getAllGroupChat = async (req, res, next) => {
     try {
-        const allMsg = await Message.findAll()
+        const lastMsgId = parseInt(req.query.msgId)
 
+        let allMsg
+        if (lastMsgId) {
+            allMsg = await Message.findAll({
+                where:
+                {
+                    id: {
+                        [Op.gt]: lastMsgId
+                    }
+                }
+            })
+        }
+        else {
+            allMsg = await Message.findAll()
+        }
         const messagesWithUsers = []
 
         for (let message of allMsg) {
@@ -51,7 +65,8 @@ exports.getAllGroupChat = async (req, res, next) => {
 
             messagesWithUsers.push({
                 userMessage: message.userMessage,
-                userName: user.userName
+                userName: user.userName,
+                msgId: message.id
             })
         }
 
