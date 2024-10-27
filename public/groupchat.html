@@ -16,29 +16,42 @@
         <div class="main-heading">
             <h1>Chat App</h1>
         </div>
-        <div id="para">
-            <div id="userLogged">
+        <div class="content">
+            <div class="group-list">
+                <h3>Your Groups</h3>
+                <div class="group-actions">
+                    <button id="createGroupBtn">Create New Group</button>
+                </div>
+                <ul id="userGroups">
+                    <li id="noGroupChat">Chat with EveryOne</li>
+                    
+                </ul>
 
             </div>
-            <div id="chats">
+            <div id="para">
+                <h2 id="groupName"></h2>
+                <div id="userLogged">
+
+                </div>
+                <div id="chats">
+
+                </div>
+
+                <div class="input-chat">
+                    <form onsubmit="sendChatToGroup(event)">
+                        <input type="text" id="msg" name="msg" placeholder="Type message here...">
+                        <button type="submit">Send</button>
+                    </form>
+
+
+
+                </div>
 
             </div>
-        </div>
-        <div class="input-chat">
-            <form onsubmit="sendChatToGroup(event)">
-                <input type="text" id="msg" name="msg">
-                <button type="submit">Send</button>
-            </form>
-
-
-
-        </div>
-
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"
-        integrity="sha512-DdX/YwF5e41Ok+AI81HI8f5/5UsoxCVT9GKYZRIzpLxb8Twz4ZwPPX+jQMwMhNQ9b5+zDEefc+dcvQoPWGNZ3g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="groupchat.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"
+                integrity="sha512-DdX/YwF5e41Ok+AI81HI8f5/5UsoxCVT9GKYZRIzpLxb8Twz4ZwPPX+jQMwMhNQ9b5+zDEefc+dcvQoPWGNZ3g=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="groupchat.js"></script>
 </body>
 
 </html>
