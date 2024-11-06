@@ -8,6 +8,11 @@ const UserGroup = sequelize.define('usergroup', {
     allowNull: false,
     primaryKey: true
   },
+  role:{ 
+    type:Sequelize.STRING,
+    allowNull:false,
+    
+  }
 
 })
 

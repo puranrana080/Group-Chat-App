@@ -1,12 +1,12 @@
-let currentGroupId=null
-
+let currentGroupId = null
+//saving msg in db
 function sendChatToGroup(event) {
     event.preventDefault()
     const userMessage = event.target.msg.value
     console.log(userMessage)
     const token = localStorage.getItem('token')
 
-    axios.post("http://localhost:3000/groupchat/sendChat", { message: userMessage,groupId:currentGroupId }, { headers: { "Authorization": token } })
+    axios.post("http://localhost:3000/groupchat/sendChat", { message: userMessage, groupId: currentGroupId }, { headers: { "Authorization": token } })
         .then(response => {
             console.log("single", response.data)
             event.target.reset()
@@ -21,6 +21,7 @@ function sendChatToGroup(event) {
 
 function displayLoggedUserOnScreen(user) {
     const userPara = document.getElementById('userLogged')
+
 
     const newpara = document.createElement('p')
     newpara.appendChild(document.createTextNode(`${user.userName} joined`))
@@ -47,8 +48,8 @@ function getChatAndDisplay() {
     if (localStorageGroupChat && localStorageGroupChat.length > 0) {
         lastMsgId = localStorageGroupChat[localStorageGroupChat.length - 1].msgId
     }
-    else{
-        lastMsgId=0
+    else {
+        lastMsgId = 0
     }
 
 
@@ -56,6 +57,15 @@ function getChatAndDisplay() {
         .then(response => {
 
             const groupChat = response.data.allChat
+            const allUsers = response.data.allUsers
+
+            document.getElementById('userLogged').innerHTML = ''
+            allUsers.forEach(user => {
+                displayLoggedUserOnScreen(user)
+                console.log("user logged", user.userName)
+            })
+
+
             console.log("New Message", groupChat)
             const mergedMessages = (localStorageGroupChat || []).concat(groupChat)
             while (mergedMessages.length > 10) {
@@ -89,27 +99,11 @@ window.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-
-    axios.get("http://localhost:3000/groupchat/users", { headers: { "Authorization": token } })
-        .then(response => {
-            console.log("server Response", response.data.allUsers)
-            const loggedUser = response.data.allUsers
-
-            loggedUser.forEach(user => {
-                displayLoggedUserOnScreen(user)
-                console.log("user logged", user.userName)
-            })
-
-        })
-        .catch(err => {
-            console.log("err, not got", err)
-        })
-
     setInterval(() => getChatAndDisplay(), 1000)
     // getChatAndDisplay()
 
     getUserAllGroup()
-     document.getElementById('groupName').innerHTML='Chat with everyone'
+    document.getElementById('groupName').innerHTML = 'Chat with everyone'
 
 })
 ////Creating Group
@@ -165,27 +159,40 @@ function displayUserGroups(item) {
 
     const groupName = item.groupName
 
-    groupItem.addEventListener('click',()=>{
-        currentGroupId=item.id
-        document.getElementById('groupName').innerHTML=`Group-${item.groupName}`
+    groupItem.addEventListener('click', () => {
+        currentGroupId = item.id
+        const currentGroup = document.getElementById('groupName')
+        currentGroup.innerHTML = `  ${item.groupName}`
+
+        const infoBtn = document.createElement('button')
+        infoBtn.textContent = 'tap here for group info'
+
+        infoBtn.className = 'btn btn-info btn-sm'
+        infoBtn.setAttribute('type', 'button');
+
+        currentGroup.appendChild(infoBtn)
+
+        infoBtn.addEventListener('click', () => {
+            window.location.href = `group-details.html?groupId=${item.id}`
+
+
+
+        })
+
+
         getChatAndDisplay()
     })
+
+
 
     groupItem.appendChild(document.createTextNode(`${groupName}`))
     groupLists.appendChild(groupItem)
 
 }
 
-document.getElementById('noGroupChat').addEventListener('click',()=>{
-    currentGroupId=null
-     document.getElementById('groupName').innerHTML='Chat with everyone'
-    
+document.getElementById('noGroupChat').addEventListener('click', () => {
+    currentGroupId = null
+    document.getElementById('groupName').innerHTML = 'Chat with everyone'
+
 })
 
-
-// function getGroupChat(groupId){
-//     console.log("GroupId",groupId)
-//     currentGroupId = groupId; // Update the current group ID
-//     getChatAndDisplay()
-
-// }

@@ -1,0 +1,58 @@
+body {
+    height: 100%;
+
+
+}
+
+.container {
+    
+    margin: 20px auto;
+    text-align: center;
+}
+
+.group-users {
+    margin-top: 20px;
+}
+
+.group-users p {
+
+    /* border: 2px solid blue; */
+    padding: 4px;
+    margin: 4px auto;
+    background-color: rgb(112, 231, 223);
+    border-radius: 5px;
+    text-align: left;
+    max-width: 80%;
+
+}
+
+#goback {
+    float: right;
+}
+
+.member-item {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+
+}
+
+.highlight {
+    background-color: rgb(138, 213, 235);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.promote-btn {
+    background-color: rgb(244, 157, 157);
+}
+
+.remove-btn {
+    background-color: rgb(243, 165, 243);
+}

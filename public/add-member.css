@@ -1,0 +1,56 @@
+body {
+    height: 100%;
+    /* border:2px solid red; */
+    background-color: #f8f9fa;
+}
+
+.container {
+
+    margin: 30px auto;
+    border: 2px solid rgb(210, 212, 155);
+    text-align: center;
+    width: 70%;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+
+
+
+}
+
+.heading {
+    margin-bottom: 20px;
+}
+
+#searchUser {
+    margin: 20px 0;
+}
+
+#searchUser input {
+    margin-right: 10px;
+    border-radius: 10px;
+}
+
+.listOfUser {
+    margin: 15px auto;
+}
+
+.listOfUser ol {
+    list-style-type: none;
+    padding: 0;
+
+}
+
+.listOfUser ol li {
+
+    padding: 10px;
+    background-color: #fff;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid rgb(203, 179, 179);
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+
+}

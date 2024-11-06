@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 
-const sequelize = new Sequelize("groupchat", "root", "root5544", {
+const sequelize = new Sequelize("groupchat", "root", "Root@5544", {  //password for window root5544
     dialect: "mysql",
     host: "localhost"
 })

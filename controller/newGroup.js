@@ -12,7 +12,8 @@ exports.createNewGroup = async (req, res, next) => {
         // updating usergroup table
         await UserGroup.create({
             userId: req.user.id,
-            groupId: newGroup.id
+            groupId: newGroup.id,
+            role: 'Admin'
         })
 
 
@@ -26,17 +27,30 @@ exports.createNewGroup = async (req, res, next) => {
 }
 
 exports.getUserAllGroups = async (req, res, next) => {
-    try{
-    const allUserGroups= await Group.findAll({where:{
-        createdBy:req.user.userEmail
-    }})
-    res.status(200).json({groups:allUserGroups})
+    try {
+        const allUserGroups = await UserGroup.findAll({
+            where: {
+                userId: req.user.id
+            }
+        })
+
+        const groupIds = allUserGroups.map(group => group.groupId)
+
+        const allGroupsOfUser = await Group.findAll({
+            where: {
+                id: groupIds
+            }
+
+        })
+
+
+
+        console.log("These aee the group user is part of ", allGroupsOfUser)
+
+
+        res.status(200).json({ groups: allGroupsOfUser })
     }
-    catch(error){
-        res.status(500).json({message:"error in finding group"})
+    catch (error) {
+        res.status(500).json({ message: "error in finding group" })
     }
-
-
-
-
 }
