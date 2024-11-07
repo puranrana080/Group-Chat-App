@@ -6,6 +6,9 @@ const User = require('./model/user')
 const Message = require('./model/groupmessages')
 const Group = require('./model/group')
 const UserGroup = require('./model/usergroup')
+const morgan = require('morgan')
+
+require('dotenv').config()
 
 const sequelize = require('./util/database')
 const userRoutes = require('./routes/user')
@@ -19,6 +22,7 @@ app.use(express.json())
 app.use(cors({
     origin: "http://localhost:3000"
 }))
+app.use(morgan('combined'))
 
 app.use(userRoutes)
 app.use(groupchatRoutes)
@@ -39,7 +43,7 @@ Message.belongsTo(Group, { onDelete: 'CASCADE' })
 sequelize.sync()
     // sequelize.sync({force:true})
     .then(() => {
-        app.listen(3000, () => {
+        app.listen(process.env.PORT || 3000, () => {
             console.log("inside 3000 port")
         })
     })

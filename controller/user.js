@@ -2,6 +2,7 @@ const User = require('../model/user')
 const path = require('path')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 
 exports.getRegisterForm = (req, res, next) => {
@@ -46,7 +47,7 @@ exports.postRegisterForm = async (req, res, next) => {
 }
 
 function generateAccessToken(id) {
-    return jwt.sign({ userId: id }, 'secretecodeTOKEN')
+    return jwt.sign({ userId: id }, process.env.TOKEN_SECRET)
 }
 
 
