@@ -64,6 +64,7 @@ exports.getAllGroupChat = async (req, res, next) => {
             messagesWithUsers.push({
                 userMessage: message.userMessage,
                 userName: user.userName,
+                userEmail:user.userEmail,
                 msgId: message.id
             })
         }

@@ -1,22 +1,40 @@
+
+const token = localStorage.getItem('token')
+const socket = io('http://localhost:3001', {
+    auth: { token }
+})
+
+
+
 let currentGroupId = null
 //saving msg in db
 function sendChatToGroup(event) {
     event.preventDefault()
     const userMessage = event.target.msg.value
-    console.log(userMessage)
     const token = localStorage.getItem('token')
 
-    axios.post("http://localhost:3000/groupchat/sendChat", { message: userMessage, groupId: currentGroupId }, { headers: { "Authorization": token } })
-        .then(response => {
-            console.log("single", response.data)
-            event.target.reset()
+    // axios.post("http://localhost:3000/groupchat/sendChat", { message: userMessage, groupId: currentGroupId }, { headers: { "Authorization": token } })
+    //     .then(response => {
+    //         console.log("single", response.data)
+    //         event.target.reset()
 
-        })
-        .catch(error => {
-            console.log("server err", error)
-        })
+    //     })
+    //     .catch(error => {
+    //         console.log("server err", error)
+    //     })
+    socket.emit('chat-message', { message: userMessage, groupId: currentGroupId })
+    const chatDisplay = document.getElementById('chats');
+    const newpara = document.createElement('p');
+    newpara.appendChild(document.createTextNode(`You: ${userMessage}`));
+    chatDisplay.appendChild(newpara);
+
+
+    event.target.reset()
 
 }
+socket.on('chat-message', (chat) => {
+    displayChatOnScreen(chat)
+})
 
 
 function displayLoggedUserOnScreen(user) {
@@ -35,8 +53,12 @@ function displayChatOnScreen(chat) {
 
     const userName = chat.userName;
     const userMessage = chat.userMessage;
+    const userEmail = chat.userEmail
 
-    newpara.appendChild(document.createTextNode(`${userName} :   ${userMessage}`))
+    const loggedInUserEmail = localStorage.getItem('userEmail');
+    const displayName = (userEmail === loggedInUserEmail) ? 'You' : userName
+
+    newpara.appendChild(document.createTextNode(`${displayName} :   ${userMessage}`))
     userPara.appendChild(newpara)
 }
 
@@ -99,11 +121,16 @@ window.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    setInterval(() => getChatAndDisplay(), 1000)
-    // getChatAndDisplay()
+
+    // setInterval(() => getChatAndDisplay(), 1000)
+    getChatAndDisplay()
 
     getUserAllGroup()
     document.getElementById('groupName').innerHTML = 'Chat with everyone'
+
+
+
+
 
 })
 ////Creating Group

@@ -7,6 +7,9 @@ const Message = require('./model/groupmessages')
 const Group = require('./model/group')
 const UserGroup = require('./model/usergroup')
 const morgan = require('morgan')
+const io =require('socket.io')(3001,{cors:{
+    origin:['http://localhost:3000']
+}})
 
 require('dotenv').config()
 
@@ -15,6 +18,7 @@ const userRoutes = require('./routes/user')
 const groupchatRoutes = require('./routes/groupchat')
 const groupListRoutes = require('./routes/grouplist')
 const groupDetailsRoutes = require('./routes/groupdetails')
+const socketController = require('./controller/socketController');
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, "public")))
@@ -28,6 +32,13 @@ app.use(userRoutes)
 app.use(groupchatRoutes)
 app.use(groupListRoutes)
 app.use(groupDetailsRoutes)
+
+app.use((req,res)=>{
+    res.sendFile(path.join(__dirname,`public/login.html`));
+})
+//socket
+
+io.on('connection', socketController.handleConnection);
 
 
 User.hasMany(Message, { onDelete: 'CASCADE' })
