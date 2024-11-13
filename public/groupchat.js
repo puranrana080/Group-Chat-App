@@ -7,6 +7,7 @@ const socket = io('http://localhost:3001', {
 
 
 let currentGroupId = null
+joinGroup(null)
 //saving msg in db
 function sendChatToGroup(event) {
     event.preventDefault()
@@ -22,7 +23,7 @@ function sendChatToGroup(event) {
     //     .catch(error => {
     //         console.log("server err", error)
     //     })
-    socket.emit('chat-message', { message: userMessage, groupId: currentGroupId })
+    socket.emit('chat-message', { message: userMessage, groupId: currentGroupId },currentGroupId)
     const chatDisplay = document.getElementById('chats');
     const newpara = document.createElement('p');
     newpara.appendChild(document.createTextNode(`You: ${userMessage}`));
@@ -33,8 +34,22 @@ function sendChatToGroup(event) {
 
 }
 socket.on('chat-message', (chat) => {
-    displayChatOnScreen(chat)
+    displayRealTimeChatOnScreen(chat)
 })
+
+function displayRealTimeChatOnScreen(chat){
+    const userPara = document.getElementById('chats')
+
+    const newpara = document.createElement('p')
+
+    const userName = chat.userName;
+    const userMessage = chat.userMessage;
+
+    newpara.appendChild(document.createTextNode(`${userName} :  ${userMessage}`))
+
+userPara.appendChild(newpara)
+
+}
 
 
 function displayLoggedUserOnScreen(user) {
@@ -55,10 +70,16 @@ function displayChatOnScreen(chat) {
     const userMessage = chat.userMessage;
     const userEmail = chat.userEmail
 
+    if(userEmail){
+
     const loggedInUserEmail = localStorage.getItem('userEmail');
     const displayName = (userEmail === loggedInUserEmail) ? 'You' : userName
 
     newpara.appendChild(document.createTextNode(`${displayName} :   ${userMessage}`))
+    }
+    else{
+        newpara.appendChild(document.createTextNode(`${userName} :  ${userMessage}`))
+    }
     userPara.appendChild(newpara)
 }
 
@@ -205,6 +226,8 @@ function displayUserGroups(item) {
 
 
         })
+        //socket room join
+        joinGroup(item.id)
 
 
         getChatAndDisplay()
@@ -216,10 +239,20 @@ function displayUserGroups(item) {
     groupLists.appendChild(groupItem)
 
 }
+function joinGroup(groupId){
+    socket.emit('join-group', groupId);
+    
+    // Set the current group ID to keep track of which group the user is in
+    currentGroupId = groupId;
+
+    console.log(`Joined group ${groupId}`);
+
+}
 
 document.getElementById('noGroupChat').addEventListener('click', () => {
     currentGroupId = null
     document.getElementById('groupName').innerHTML = 'Chat with everyone'
+    joinGroup(null)
 
 })
 
