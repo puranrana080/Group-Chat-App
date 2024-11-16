@@ -6,7 +6,11 @@ const Message = sequelize.define('messages', {
         type: Sequelize.STRING,
         allowNull: false
 
+    },
+    imageUrl: {
+        type: Sequelize.STRING,
+        allowNull: true
     }
 })
 
-module.exports=Message
+module.exports = Message
