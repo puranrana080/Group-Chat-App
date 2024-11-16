@@ -3,6 +3,7 @@ const path = require('path')
 const Message = require('../model/groupmessages')
 const { Op } = require('sequelize')
 const UserGroup = require('../model/usergroup')
+const S3Services = require('../services/s3Services')
 
 
 
@@ -42,6 +43,30 @@ exports.postSendChat = async (req, res, next) => {
     }
 }
 
+exports.uploadImageToS3 = async (req, res, next) => {
+    console.log("this is the file description", req.file)
+
+
+    if (!req.file) {
+        return res.status(400).send({ message: 'No file uploaded.' });
+    }
+
+    try {
+        const file = req.file
+        const fileName = file.originalname + '-' + Date.now()
+        const fileURL = await S3Services.uploadToS3(file, fileName)
+        console.log("Hi all this i sfile url", fileURL)
+        res.status(200).json({ message: "file uploaded successfully", fileURL })
+    }
+    catch (error) {
+        console.log("Error Uploading To s3", error)
+
+        res.status(500).send({ message: "Error uploading file" })
+    }
+
+
+}
+
 exports.getAllGroupChat = async (req, res, next) => {
     try {
         const lastMsgId = parseInt(req.query.msgId) || 0
@@ -64,8 +89,9 @@ exports.getAllGroupChat = async (req, res, next) => {
             messagesWithUsers.push({
                 userMessage: message.userMessage,
                 userName: user.userName,
-                userEmail:user.userEmail,
-                msgId: message.id
+                userEmail: user.userEmail,
+                msgId: message.id,
+                image: message.imageUrl
             })
         }
         //now getting user part of group

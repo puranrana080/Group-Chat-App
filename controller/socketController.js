@@ -22,68 +22,57 @@ exports.handleConnection = async (socket) => {
             // socket.join(groupId);  // The user joins the group (room)
             // console.log(`${socket.user.userName} joined group ${groupId}`);
             if (groupId === null) {
-                
+
                 socket.join('null-group');
                 console.log(`${socket.user.userName} joined the null group chat`);
             } else {
-              
+
                 socket.join(groupId);
                 console.log(`${socket.user.userName} joined group ${groupId}`);
             }
-        
-        
+
+
         });
 
 
         socket.on('chat-message', async (data, groupId) => {
 
             try {
-                const groupToUse=data.groupId ||null
+                const groupToUse = data.groupId || null
+
+
                 const newMessage = await Message.create({
                     userId: socket.user.id,
                     groupId: groupToUse,
-                    userMessage: data.message
+                    userMessage: data.message,
+                    imageUrl: data.imageUrl
                 })
-                // socket.broadcast.emit('chat-message',{
-                //     userName: socket.user.userName,
-                //     userMessage: data.message,
-                //     groupId: data.groupId
-                // },groupId)
-                // socket.to(groupId).emit('chat-message',
-                //     {userName:socket.user.userName,
-                //         userMessage:data.message,
-                //         groupId:data.groupId
-                //     })
 
                 if (groupId === null) {
                     // Emit message to all users in the 'null-group' 
                     socket.to('null-group').emit('chat-message', {
                         userName: socket.user.userName,
                         userMessage: data.message,
-                    
+                        imageUrl: data.imageUrl
+
                     });
                 } else {
                     // Emit message to the specific group
                     socket.to(groupId).emit('chat-message', {
                         userName: socket.user.userName,
                         userMessage: data.message,
-                        groupId: data.groupId
+                        groupId: data.groupId,
+                        imageUrl: data.imageUrl
                     });
                 }
-
-
-
-
-               
-
-                console.log(`${socket.user.userName}: ${data.message}`);
+                console.log(`${socket.user.userName}: ${data.message} with ${data.imageUrl}`);
             }
             catch (error) {
                 console.log("Error saving messsage to db", error)
             }
-            
+
             console.log(`${socket.user.userName}: ${data.message}`);
-            
+
 
         });
 
@@ -95,7 +84,7 @@ exports.handleConnection = async (socket) => {
     }
     catch (error) {
         console.log('Authentication error:', error);
-        socket.disconnect(); 
+        socket.disconnect();
     }
 
 }

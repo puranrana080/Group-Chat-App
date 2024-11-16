@@ -9,27 +9,44 @@ const socket = io('http://localhost:3001', {
 let currentGroupId = null
 joinGroup(null)
 //saving msg in db
-function sendChatToGroup(event) {
+async function sendChatToGroup(event) {
     event.preventDefault()
     const userMessage = event.target.msg.value
     const token = localStorage.getItem('token')
+    const imageFile = event.target.image.files[0];
 
-    // axios.post("http://localhost:3000/groupchat/sendChat", { message: userMessage, groupId: currentGroupId }, { headers: { "Authorization": token } })
-    //     .then(response => {
-    //         console.log("single", response.data)
-    //         event.target.reset()
+    let imageUrl = null
 
-    //     })
-    //     .catch(error => {
-    //         console.log("server err", error)
-    //     })
-    socket.emit('chat-message', { message: userMessage, groupId: currentGroupId },currentGroupId)
+    if (imageFile) {
+        const formData = new FormData()
+        formData.append('image', imageFile)
+        console.log("this is from data", formData)
+        try {
+
+
+
+            const response = await axios.post("http://localhost:3000/groupchat/uploadImageToS3", formData, { headers: { "Authorization": token } })
+
+            console.log("Image uploaded successfully", response)
+            imageUrl = response.data.fileURL
+        }
+        catch (error) {
+            console.log("Error uploading image to server", error)
+            alert("Failed to upload image. Try again.");
+            return;
+        }
+
+    }
+    socket.emit('chat-message', { message: userMessage, groupId: currentGroupId, imageUrl }, currentGroupId)
     const chatDisplay = document.getElementById('chats');
     const newpara = document.createElement('p');
-    newpara.appendChild(document.createTextNode(`You: ${userMessage}`));
+    if (imageUrl) {
+        newpara.innerHTML = `You:${userMessage} <br><img src="${imageUrl}" alt="image uploaded" style="max-width:200px">`
+    }
+    else {
+        newpara.appendChild(document.createTextNode(`You: ${userMessage}`));
+    }
     chatDisplay.appendChild(newpara);
-
-
     event.target.reset()
 
 }
@@ -37,17 +54,24 @@ socket.on('chat-message', (chat) => {
     displayRealTimeChatOnScreen(chat)
 })
 
-function displayRealTimeChatOnScreen(chat){
+
+
+
+function displayRealTimeChatOnScreen(chat) {
     const userPara = document.getElementById('chats')
 
     const newpara = document.createElement('p')
 
     const userName = chat.userName;
     const userMessage = chat.userMessage;
-
-    newpara.appendChild(document.createTextNode(`${userName} :  ${userMessage}`))
-
-userPara.appendChild(newpara)
+    const userImage = chat.imageUrl
+    if (userImage) {
+        newpara.innerHTML = `You:${userMessage} <br><img src="${userImage}" alt="image uploaded" style="max-width:200px">`
+    }
+    else {
+        newpara.appendChild(document.createTextNode(`${userName} :  ${userMessage}`))
+    }
+    userPara.appendChild(newpara)
 
 }
 
@@ -69,15 +93,21 @@ function displayChatOnScreen(chat) {
     const userName = chat.userName;
     const userMessage = chat.userMessage;
     const userEmail = chat.userEmail
+    const image = chat.image
 
-    if(userEmail){
+    if (userEmail) {
 
-    const loggedInUserEmail = localStorage.getItem('userEmail');
-    const displayName = (userEmail === loggedInUserEmail) ? 'You' : userName
+        const loggedInUserEmail = localStorage.getItem('userEmail');
+        const displayName = (userEmail === loggedInUserEmail) ? 'You' : userName
+        if (image) {
+            newpara.innerHTML = `${displayName}:${userMessage} <br><img src="${image}" alt="image uploaded" style="max-width:200px">`
 
-    newpara.appendChild(document.createTextNode(`${displayName} :   ${userMessage}`))
+
+        } else {
+            newpara.appendChild(document.createTextNode(`${displayName} :   ${userMessage}`))
+        }
     }
-    else{
+    else {
         newpara.appendChild(document.createTextNode(`${userName} :  ${userMessage}`))
     }
     userPara.appendChild(newpara)
@@ -239,9 +269,9 @@ function displayUserGroups(item) {
     groupLists.appendChild(groupItem)
 
 }
-function joinGroup(groupId){
+function joinGroup(groupId) {
     socket.emit('join-group', groupId);
-    
+
     // Set the current group ID to keep track of which group the user is in
     currentGroupId = groupId;
 
@@ -253,6 +283,27 @@ document.getElementById('noGroupChat').addEventListener('click', () => {
     currentGroupId = null
     document.getElementById('groupName').innerHTML = 'Chat with everyone'
     joinGroup(null)
+    getChatAndDisplay()
 
 })
 
+
+//on selection of image
+const fileInput = document.getElementById('file-upload')
+const uploadIconContainer = document.getElementById('upload-icon-container')
+
+fileInput.addEventListener('change', function () {
+    const file = this.files[0]
+
+    if (file) {
+        console.log('Selected file:', file.name);  // Log file name
+        console.log('File type:', file.type);      // Log MIME type
+    }
+
+    if (file && file.type.startsWith('image/')) {
+        uploadIconContainer.innerHTML =
+            `
+       <svg class="upload-icon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(37,173,85,1)"><path d="M3 19H21V21H3V19ZM13 5.82843V17H11V5.82843L4.92893 11.8995L3.51472 10.4853L12 2L20.4853 10.4853L19.0711 11.8995L13 5.82843Z"></path></svg>
+       `
+    }
+})

@@ -45,6 +45,19 @@
                 <div class="input-chat">
                     <form onsubmit="sendChatToGroup(event)">
                         <input type="text" id="msg" name="msg" placeholder="Type message here...">
+                        <input type="file" id="file-upload" accept="image/*" name="image">
+                        <label for="file-upload" id="upload-icon-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" id="photo">
+                                <path
+                                    d="M30 8C17.862 8 8 17.862 8 30s9.862 22 22 22 22-9.862 22-22S42.138 8 30 8zm0 2c11.058 0 20 8.943 20 20 0 1.998-.3 3.923-.844 5.742l-5.949-5.949c-.605-.605-1.406-.908-2.207-.908s-1.602.303-2.207.908L33.5 35.086l-9.293-9.293c-.605-.605-1.406-.908-2.207-.908s-1.602.303-2.207.908l-9.152 9.152A20.01 20.01 0 0 1 10 30c0-11.058 8.942-20 20-20zm-8 16.873c.285 0 .57.11.793.334l9.293 9.293-5.793 5.793a1 1 0 0 0 1.414 1.414l12.5-12.5a1.107 1.107 0 0 1 1.586 0l6.62 6.62C45.37 44.985 38.277 50 30 50c-8.553 0-15.82-5.36-18.684-12.902l9.89-9.89c.224-.224.509-.334.794-.334z"
+                                    color="#000" />
+                                <path
+                                    d="M30 14c-2.75 0-5 2.25-5 5s2.25 5 5 5 5-2.25 5-5-2.25-5-5-5zm0 2c1.669 0 3 1.331 3 3s-1.331 3-3 3-3-1.331-3-3 1.331-3 3-3z"
+                                    color="#000" />
+                            </svg>
+
+
+                        </label>
                         <button type="submit">Send</button>
                     </form>
                 </div>
@@ -53,7 +66,7 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"
                 integrity="sha512-DdX/YwF5e41Ok+AI81HI8f5/5UsoxCVT9GKYZRIzpLxb8Twz4ZwPPX+jQMwMhNQ9b5+zDEefc+dcvQoPWGNZ3g=="
                 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            
+
 </body>
 
 </html>

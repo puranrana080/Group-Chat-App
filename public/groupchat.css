@@ -45,7 +45,7 @@
 }
 
 .input-chat {
-    background-color: rgb(151, 230, 151);
+    background-color: rgb(255, 255, 255);
     margin: 20px 0;
     text-align: center;
     width: 100%;
@@ -56,6 +56,16 @@
 .input-chat form {
     display: flex;
     justify-content: space-between;
+}
+
+#file-upload {
+    display: none;
+}
+
+.upload-icon {
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
 }
 
 #msg {
